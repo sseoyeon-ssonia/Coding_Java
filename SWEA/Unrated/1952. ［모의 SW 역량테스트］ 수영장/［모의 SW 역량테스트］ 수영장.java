@@ -41,12 +41,12 @@ class Solution
 	static void priceCal(int month, int nowPrice) {
 
 		// 가지치기
-		if (nowPrice >= minPrice || month > 12) {
+		if (nowPrice >= minPrice) {
 			return;
 		}
 
 		// 종료조건
-		if (month == 12) {
+		if (month >= 12) {
 			minPrice = Math.min(nowPrice, minPrice);
 			return;
 		}
