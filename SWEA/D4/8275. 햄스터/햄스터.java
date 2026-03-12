@@ -1,10 +1,11 @@
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Solution {
+public class Solution{
 	static int n; // 우리 수
 	static int x; // 각 우리에 있을 수 있는 최대 햄스터 수
 	static int m; // 기록 수
@@ -58,9 +59,25 @@ public class Solution {
 
 	static void hamsterCase(int N) {
 
+		//가지치기
+		for(int i = 0;i<m;i++){
+			int tempL = cntDocu[i][0];
+			int tempR = cntDocu[i][1];
+			int tempS = cntDocu[i][2];
+
+			//현재 기록의 범위가 이미 다 채워졌다면
+			if(N>=tempR){
+				int tempCnt = 0;
+				for (int j = tempL - 1; j <= tempR - 1; j++) {
+					tempCnt += hamsterTemp[j];
+				}
+				if(tempCnt!=tempS) return;
+			}
+		}
+
 		// 종료조건
 		if (N == n) {
-			hamsterCal(N);
+			hamsterCal();
 			return;
 		}
 
@@ -72,7 +89,8 @@ public class Solution {
 
 	}
 
-	static void hamsterCal(int a) {
+	static void hamsterCal() {
+
 		// 조건 탐색
 		int nowHamster = 0; // 현재 조합의 햄스터 수
 		for (int i = 0; i < n; i++) {
@@ -80,33 +98,13 @@ public class Solution {
 		}
 
 		if (nowHamster > maxHamster) { // 기록 조건 검색
-			boolean flag = false;
 
-			for (int i = 0; i < m; i++) {
-				int tempL = cntDocu[i][0];
-				int tempR = cntDocu[i][1];
-				int tempS = cntDocu[i][2];
-
-				int tempCnt = 0;
-
-				for (int j = tempL - 1; j <= tempR - 1; j++) {
-					tempCnt += hamsterTemp[j];
-				}
-				if (tempCnt == tempS) {
-					flag = true;
-				} else {
-					flag = false;
-					break;
-				}
-
+			maxHamster = nowHamster;
+			ans.delete(0, ans.length());
+			for (int i = 0; i < n; i++) {
+				ans.append(hamsterTemp[i] + " ");
 			}
-			if (flag) {
-				maxHamster = nowHamster;
-				ans.delete(0, ans.length());
-				for (int i = 0; i < n; i++) {
-					ans.append(hamsterTemp[i] + " ");
-				}
-			}
+
 
 		}
 		return;
