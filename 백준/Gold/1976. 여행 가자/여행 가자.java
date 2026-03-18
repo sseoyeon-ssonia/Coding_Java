@@ -45,6 +45,10 @@ public class Main {
 			plan[i] = num - 1;
 		}
 
+		for (int i = 0; i < n; i++) {
+		    find(i); // 모든 노드 경로 압축
+		}
+		
 		String ans = "YES";
 
 		for (int i = 1; i < m; i++) {
@@ -64,6 +68,7 @@ public class Main {
 			return x;
 		}
 		return parent[x] = find(parent[x]);
+		
 	}
 	
 	//처음 union -> 
@@ -91,6 +96,10 @@ public class Main {
 //
 //	}
 
+/*
+ * union2 ->
+ 현재 문제에서는 통과되었지만, 자식 노드들의 연결된 부모는 업데이트 되지 않음
+ */
 	static void union2(int x, int y) {
 		int rootX = find(x);
 		int rootY = find(y);
