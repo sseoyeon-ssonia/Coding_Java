@@ -1,4 +1,5 @@
-//BFS로 풀기
+
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class Main {
             plan[i]=Integer.parseInt(st.nextToken())-1;
         }
 
-        bfs(plan[0]);
+        dfs(plan[0]);
 
         String ans = "YES";
         for(int i = 0;i<m;i++){
@@ -57,24 +58,34 @@ public class Main {
 
     }//main 끝
 
-    public static void bfs(int v){
-        q=new LinkedList<>();
-
-        q.add(v);
-        visited[v]=true;
-
-        while(!q.isEmpty()){
-            int curr = q.poll();
-
-            for(int w:graph[curr]){
-                if(!visited[w]){
-                    q.add(w);
-                    visited[w]=true;
-                }
-            }
-        }
-
-
+    public static void dfs(int v){
+       
+    	visited[v]=true;
+    	
+    	for(int curr:graph[v]) {
+    		if(!visited[curr]) {
+    			dfs(curr);
+    		}
+    	}
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
