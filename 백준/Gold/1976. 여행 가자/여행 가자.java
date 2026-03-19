@@ -1,123 +1,80 @@
-
+//BFS로 풀기
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-
-//여러 번 방문 가능 = 같은 그래프에 속해있으면 연결 가능
+import java.util.*;
 
 public class Main {
-	static int[] parent;
-//	static int[] origin;
+    static int n, m; //도시 수
+    static List<Integer>[] graph;
+    static boolean[] visited;
+    static Queue<Integer> q;
+    static int[] plan;
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		int n = Integer.parseInt(br.readLine());
-//		origin = new int[n];
-		parent = new int[n];
-		for (int i = 0; i < n; i++) {
-//			origin[i]=i;
-			parent[i] = i;
-		}
+        n=Integer.parseInt(br.readLine());
+        m=Integer.parseInt(br.readLine());
 
-		int m = Integer.parseInt(br.readLine()); // 도시 수
+        graph=new ArrayList[n];
+        for(int i = 0;i<n;i++){
+            graph[i]=new ArrayList<>();
+        }//초기화
 
-		for (int i = 0; i < n; i++) {
-			st = new StringTokenizer(br.readLine());
+        visited=new boolean[n];
+        StringTokenizer st;
+        for(int i = 0;i<n;i++){
+            st =new StringTokenizer(br.readLine());
+            for(int j = 0;j<n;j++){
+                int info = Integer.parseInt(st.nextToken());
 
-			for (int j = 0; j < n; j++) {
-				int info = Integer.parseInt(st.nextToken());
+                if(info==1){
+                    graph[i].add(j);
+                    graph[j].add(i);
+                }
+            }
+        }
 
-				if (info == 1) {
-					union2(i, j);
-				}
-			}
+        plan = new int[m];
+        st = new StringTokenizer(br.readLine());
+        for(int i = 0;i<m;i++){
+            plan[i]=Integer.parseInt(st.nextToken())-1;
+        }
 
-		}
+        bfs(plan[0]);
 
-		st = new StringTokenizer(br.readLine());
-		int[] plan = new int[m];
-		for (int i = 0; i < m; i++) {
-			int num = Integer.parseInt(st.nextToken());
-			plan[i] = num - 1;
-		}
+        String ans = "YES";
+        for(int i = 0;i<m;i++){
+            if(!visited[plan[i]]){
+                ans="NO";
+                break;
+            }
+        }
 
-		for (int i = 0; i < n; i++) {
-		    find(i); // 모든 노드 경로 압축
-		}
-		
-		String ans = "YES";
+        System.out.println(ans);
 
-		for (int i = 1; i < m; i++) {
-			if (parent[plan[i]] != parent[plan[i - 1]]) {
-				ans = "NO";
-				break;
-			}
-		}
+    }//main 끝
 
-		System.out.println(ans);
+    public static void bfs(int v){
+        q=new LinkedList<>();
 
-	}
+        q.add(v);
+        visited[v]=true;
 
-	static int find(int x) {
+        while(!q.isEmpty()){
+            int curr = q.poll();
 
-		if (parent[x] == x) {
-			return x;
-		}
-		return parent[x] = find(parent[x]);
-		
-	}
-	
-	//처음 union -> 
-	/*
-7
-5
-0 1 0 0 1 1 0
-1 0 1 0 0 0 0
-0 1 0 0 1 1 0
-0 0 0 0 1 0 1
-1 0 1 1 0 1 0
-1 0 1 0 1 0 1
-0 0 0 1 0 1 0
-2 3 4 1 4
+            for(int w:graph[curr]){
+                if(!visited[w]){
+                    q.add(w);
+                    visited[w]=true;
+                }
+            }
+        }
 
-와 같을 때 (3,4)가 이어진다면, 부모 세팅이 제대로 되지 않음
-	 */
-//	static void union(int x, int y) {
-//		int rootX = find(x);
-//		int rootY = find(y);
-//
-//		if (rootX != rootY) {
-//			parent[rootY] = rootX;
-//		}
-//
-//	}
 
-/*
- * union2 ->
- 현재 문제에서는 통과되었지만, 자식 노드들의 연결된 부모는 업데이트 되지 않음
- */
-	static void union2(int x, int y) {
-		int rootX = find(x);
-		int rootY = find(y);
 
-		
-		if (rootX != rootY) {
-			if(rootX>rootY) {
-				int temp = rootY;
-				rootY=rootX;
-				rootX=temp;
-			}
-			parent[rootY] = rootX;
-		}
-
-	}
-
-	public boolean isConnected(int x, int y) {
-		return find(x) == find(y);
-	}
-
+    }
 }
