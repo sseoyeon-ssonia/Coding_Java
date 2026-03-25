@@ -1,4 +1,5 @@
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main{
+public class Main {
 	static int m, n, h;
 	static int[][][] map; // 각각 h, n, m
 	static boolean[][][] visited;
@@ -39,48 +40,40 @@ public class Main{
 
 		int day = -1;
 
-		Queue<int[]> tempQ = new LinkedList<>();
+		Queue<int[]> q = new LinkedList<>();
 
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < n; j++) {
 				for (int k = 0; k < m; k++) {
 					if (map[i][j][k] == 1) {
 						visited[i][j][k] = true;
-						tempQ.add(new int[] { i, j, k });
+						q.add(new int[] { i, j, k });
 					}
 				}
 			}
 		}
 
-		while (!tempQ.isEmpty()) {
-			Queue<int[]> q = new LinkedList<>();
-			int tempSize = tempQ.size();
+		while (!q.isEmpty()) {
+			int tempSize = q.size();
+			day++;
 			for (int i = 0; i < tempSize; i++) {
-				q.add(tempQ.poll());
-			}
-
-			while (!q.isEmpty()) {
 				int[] temp = q.poll();
 				int z = temp[0];
 				int x = temp[1];
 				int y = temp[2];
-				visited[z][x][y] = true;
-
+				
 				for (int d = 0; d < 6; d++) {
 					int nz = z + dz[d];
 					int nr = x + dr[d];
 					int nc = y + dc[d];
 
-					if (nz>=0 && nr >= 0 && nc >= 0 && nz<h&& nr < n && nc < m && !visited[nz][nr][nc] && map[nz][nr][nc] != -1) {
+					if (nz>=0 && nr >= 0 && nc >= 0 && nz<h&& nr < n && nc < m && !visited[nz][nr][nc] && map[nz][nr][nc] ==0) {
 						visited[nz][nr][nc] = true;
-						map[nz][nr][nc]++;
-						tempQ.add(new int[] { nz, nr, nc });
+						map[nz][nr][nc]=1;
+						q.add(new int[] { nz, nr, nc });
 					}
 				}
-
 			}
-
-			day++;
 		}
 
 		boolean flag = true;
@@ -93,13 +86,11 @@ public class Main{
 						break;
 					}
 				}
-				if (flag = false) {
-					day = -1;
+				if (!flag) {
 					break;
 				}
 			}
-			if (flag = false) {
-				day = -1;
+			if (!flag) {
 				break;
 			}
 		}
