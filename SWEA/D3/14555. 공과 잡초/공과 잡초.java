@@ -1,41 +1,49 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
 
-import java.util.Scanner;
-import java.io.FileInputStream;
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st= new StringTokenizer(br.readLine());
+
+        int T = Integer.parseInt(st.nextToken());
+        for(int tc = 1;tc<=T;tc++){
+
+            Stack<Character> stack = new Stack<>();
 
 
-class Solution
-{
-	public static void main(String args[]) throws Exception
-	{
-		Scanner sc = new Scanner(System.in);
+            int ans = 0;
 
-		int test = sc.nextInt();
-		for (int t = 1; t <= test; t++) {
+            st = new StringTokenizer(br.readLine());
+            String str = st.nextToken();
 
-			String str = sc.next();
+            for(int i = 0;i<str.length();i++){
+                char now = str.charAt(i);
 
-			char[] groundMap = new char[str.length()];
+                if(now =='.') continue;
+                else if(now=='(') stack.add(now);
+                else if(now == ')'){
+                    stack.pop();
+                    ans++;
+                }
+                else if(now == '|'){
+                    if(!stack.isEmpty()){
+                        if (stack.peek()=='('){
+                            stack.pop();
+                            ans++;
+                        }else if(stack.peek()=='|') continue;
+                    }else stack.add(now);
 
-			for (int i = 0; i < str.length(); i++) {
-				groundMap[i] = str.charAt(i);
-			} // 배열에 하나씩 담음
+                }
 
-			// 공의 개수 최솟값. 구해야 하는 값
-			int minCount = 0;
 
-			for (int i = 0; i < groundMap.length; i++) {
-				if (groundMap[i] == '(') {
-					minCount++;
-				} else if (groundMap[i] == ')') {
-					if (groundMap[i - 1] != '(') {
-						minCount++;
-					}
-				}
-			} // for문. 공 개수 조회
+            }
 
-			System.out.printf("#%d %d%n", t, minCount);
+            System.out.println("#"+tc+" "+ans);
 
-		} // 테스트케이스 끝
 
-	}
+        }
+    }
 }
