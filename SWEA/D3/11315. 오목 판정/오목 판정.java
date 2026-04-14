@@ -1,128 +1,142 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
-import java.util.Scanner;
-import java.io.FileInputStream;
+public class Solution {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
+		int T = Integer.parseInt(st.nextToken());
+		for (int tc = 1; tc <= T; tc++) {
 
-class Solution
-{
-	public static void main(String args[]) throws Exception
-	{
-		Scanner sc = new Scanner(System.in);
+			st = new StringTokenizer(br.readLine());
+			int n = Integer.parseInt(st.nextToken());
 
-		int test = sc.nextInt();
-		for (int t = 1; t <= test; t++) {
-
-			int n = sc.nextInt();
 			char[][] map = new char[n][n];
 
 			for (int i = 0; i < n; i++) {
-				String str = sc.next();
+				st = new StringTokenizer(br.readLine());
+				String str = st.nextToken();
 				for (int j = 0; j < n; j++) {
 					map[i][j] = str.charAt(j);
 				}
-			} // 오목 판 초기화
+			}
 
-			// 출력할 정답. 판정하여 5개 연속 돌이 있으면 YES로 바꿈
+			// input 끝
 			String ans = "NO";
 
-			// 가로 검색
-			if (ans.equals("NO")) {
+			// 가로 판정
 
-				for (int i = 0; i < n; i++) {
-					for (int j = 0; j <= n - 5; j++) {
-						int oCnt = 0;
-						for (int k = 0; k < 5; k++) {
-							if (map[i][j + k] == 'o') {
-								oCnt++;
-							}
-						}
-
-						if (oCnt >= 5) {
-							ans = "YES";
-							break;
-						}
-
-					}
-					if (ans.equals("YES")) {
-						break;
-					}
-				}
-			}
-
-			// 세로 검색
-			if (ans.equals("NO")) {
-
+			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < n; j++) {
-					for (int i = 0; i <= n - 5; i++) {
-						int oCnt = 0;
+					if (map[i][j] == 'o') {
+						boolean flag = true;
 						for (int k = 0; k < 5; k++) {
-							if (map[i + k][j] == 'o') {
-								oCnt++;
+							if (j + k < 0 || j + k >= n) {
+								flag = false;
+								break;
 							}
+							if (map[i][j + k] == 'o')
+								continue;
+							else
+								flag = false;
 						}
-
-						if (oCnt >= 5) {
+						if (flag) {
 							ans = "YES";
 							break;
 						}
-
-					}
-					if (ans.equals("YES")) {
-						break;
 					}
 				}
+				if (ans == "YES")
+					break;
 			}
 
-			// 왼상->우하 대각선
-			if (ans.equals("NO")) {
-
-				for (int i = 0; i <= n - 5; i++) {
-					for (int j = 0; j <= n - 5; j++) {
-						int oCnt = 0;
-						for (int k = 0; k < 5; k++) {
-							if (map[i + k][j + k] == 'o') {
-								oCnt++;
+			// 세로 판정
+			if (ans == "NO") {
+				for (int i = 0; i < n; i++) {
+					for (int j = 0; j < n; j++) {
+						if (map[i][j] == 'o') {
+							boolean flag = true;
+							for (int k = 0; k < 5; k++) {
+								if (i + k < 0 || i + k >= n) {
+									flag = false;
+									break;
+								}
+								if (map[i + k][j] == 'o')
+									continue;
+								else
+									flag = false;
+							}
+							if (flag) {
+								ans = "YES";
+								break;
 							}
 						}
-
-						if (oCnt >= 5) {
-							ans = "YES";
-							break;
-						}
-
 					}
-					if (ans.equals("YES")) {
+					if (ans == "YES")
 						break;
-					}
 				}
 			}
 
-			// 우상->왼하 대각선
-			if (ans.equals("NO")) {
-
-				for (int i = 0; i <= n - 5; i++) {
-					for (int j = n - 1; j >= 4; j--) {
-						int oCnt = 0;
-						for (int k = 0, l = 0; k < 5; k++, l--) {
-							if (map[i + k][j + l] == 'o') {
-								oCnt++;
+			// 좌상->우하 대각선 판정
+			if (ans == "NO") {
+				for (int i = 0; i < n; i++) {
+					for (int j = 0; j < n; j++) {
+						if (map[i][j] == 'o') {
+							boolean flag = true;
+							for (int k = 0; k < 5; k++) {
+								if (i + k < 0 || i + k >= n || j + k < 0 || j + k >= n) {
+									flag = false;
+									break;
+								}
+								if (map[i + k][j + k] == 'o')
+									continue;
+								else
+									flag = false;
+							}
+							if (flag) {
+								ans = "YES";
+								break;
 							}
 						}
-
-						if (oCnt >= 5) {
-							ans = "YES";
-							break;
-						}
-
 					}
-					if (ans.equals("YES")) {
+					if (ans == "YES")
 						break;
-					}
 				}
 			}
 
-			System.out.printf("#%d %s%n", t, ans);
+			// 우상->좌하 대각선 판정
+			if (ans == "NO") {
+				for (int i = 0; i < n; i++) {
+					for (int j = 0; j < n; j++) {
+						if (map[i][j] == 'o') {
+							boolean flag = true;
+							for (int k = 0; k < 5; k++) {
+								if (i + k < 0 || i + k >= n || j - k < 0 || j - k >= n) {
+									flag = false;
+									break;
+								}
+								if (map[i + k][j - k] == 'o')
+									continue;
+								else
+									flag = false;
+							}
+							if (flag) {
+								ans = "YES";
+								break;
+							}
+						}
+					}
+					if (ans == "YES")
+						break;
+				}
+			}
 
-		} // 테스트케이스 끝
-	}
+			System.out.println("#" + tc + " " + ans);
+
+		} // tc 끝
+
+	}// main 끝
 }
