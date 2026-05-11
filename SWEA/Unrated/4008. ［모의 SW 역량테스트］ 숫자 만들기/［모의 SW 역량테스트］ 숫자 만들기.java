@@ -4,76 +4,74 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Solution {
-	static int n, min, max;
-	static int[] nums; // 숫자
-	static int[] opers = new int[4]; // + - * / 개수
+    static int n,minValue,maxValue; //숫자 개수
+    static int[] opers, nums; //연산자 개수 저장. + - * / , 숫자 저장
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
 
-		int T = Integer.parseInt(st.nextToken());
-		for (int tc = 1; tc <= T; tc++) {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-			st = new StringTokenizer(br.readLine());
-			n = Integer.parseInt(st.nextToken());
-			nums = new int[n];
+        int T = Integer.parseInt(st.nextToken());
+        for(int tc = 1;tc<=T;tc++){
 
-			st = new StringTokenizer(br.readLine());
-			for (int i = 0; i < 4; i++) {
-				opers[i] = Integer.parseInt(st.nextToken());
-			}
+        minValue=Integer.MAX_VALUE;
+        maxValue=Integer.MIN_VALUE; //최솟값 최댓값
 
-			st = new StringTokenizer(br.readLine());
-			for (int i = 0; i < n; i++) {
-				nums[i] = Integer.parseInt(st.nextToken());
-			}
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken()); //숫자 개수
 
-			// 입력 끝
-			min = Integer.MAX_VALUE;
-			max = Integer.MIN_VALUE;
+        nums = new int[n];
 
-			calc(1, nums[0]);
+        opers=new int[4];
 
-			int ans = max - min;
+        st = new StringTokenizer(br.readLine());
+        for(int i = 0;i<4;i++){
+            opers[i]=Integer.parseInt(st.nextToken());
+        }
 
-			System.out.println("#" + tc + " " + ans);
+        st = new StringTokenizer(br.readLine());
+        for(int i = 0;i<n;i++){
+            nums[i]=Integer.parseInt(st.nextToken());
+        }
 
-		} // tc 끝
+        operations(1,nums[0]);
 
-	}// main 끝
+        int ans = maxValue-minValue;
 
-	private static void calc(int cnt, int nowResult) {
+        System.out.println("#"+tc+" "+ans);
 
-		if (cnt == n) {
-			max = Math.max(max, nowResult);
-			min = Math.min(min, nowResult);
-			return;
-		}
+        }//tc 끝
 
-		for (int i = 0; i < 4; i++) {
-			if (opers[i] > 0) {
-				opers[i]--;
+    }//main 끝
 
-				switch (i) {
-				case 0:
-					calc(cnt + 1, nowResult + nums[cnt]);
-					break;
-				case 1:
-					calc(cnt + 1, nowResult - nums[cnt]);
-					break;
-				case 2:
-					calc(cnt + 1, nowResult * nums[cnt]);
-					break;
-				case 3:
-					calc(cnt + 1, nowResult / nums[cnt]);
-					break;
-				}
+    private static void operations(int idx, int nowValue){
+        if(idx==n){
+            minValue=Math.min(minValue,nowValue);
+            maxValue=Math.max(maxValue,nowValue);
+            return;
+        }
 
-				opers[i]++;
-			}
-		}
+        for(int i = 0;i<4;i++){
+            if(opers[i]==0) continue;
+            opers[i]--;
+            switch (i){
+                case 0:
+                    operations(idx+1,nowValue+nums[idx]);
+                    break;
+                case 1:
+                    operations(idx+1,nowValue-nums[idx]);
+                    break;
+                case 2:
+                    operations(idx+1,nowValue*nums[idx]);
+                    break;
+                case 3:
+                    operations(idx+1,nowValue/nums[idx]);
+                    break;
+            }
+            opers[i]++;
+        }
 
-	}
 
+    }
 }
